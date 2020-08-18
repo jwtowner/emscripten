@@ -368,7 +368,7 @@ class JSOptimizer(object):
     global final
     passes = ['asm'] + passes
     if self.emit_symbol_map and 'minifyNames' in passes:
-      passes += ['symbolMap=' + shared.replace_or_append_suffix(self.target, '.symbols')]
+      passes += ['symbolMap=' + shared.replace_suffix(self.target, '.symbols')]
     if self.profiling_funcs and 'minifyNames' in passes:
       passes += ['profilingFuncs']
     if self.minify_whitespace and 'last' in passes:
@@ -1243,7 +1243,7 @@ There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR P
     asm_target = unsuffixed(target) + '.asm.js' # might not be used, but if it is, this is the name
     wasm_text_target = asm_target.replace('.asm.js', '.wat') # ditto, might not be used
     wasm_binary_target = asm_target.replace('.asm.js', '.wasm') # ditto, might not be used
-    wasm_source_map_target = shared.replace_or_append_suffix(wasm_binary_target, '.map')
+    wasm_source_map_target = wasm_binary_target + '.map'
 
     # Apply user -jsD settings
     for s in user_js_defines:
@@ -2369,7 +2369,7 @@ There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR P
       if embed_memfile(options):
         shared.Settings.SUPPORT_BASE64_EMBEDDING = 1
 
-      final = do_emscripten(final, shared.replace_or_append_suffix(target, '.mem'))
+      final = do_emscripten(final, shared.replace_suffix(target, '.mem'))
       save_intermediate('original')
 
       if shared.Settings.WASM_BACKEND:
@@ -2446,7 +2446,7 @@ There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR P
       memfile = None
       if (not shared.Settings.WASM_BACKEND and (shared.Settings.MEM_INIT_METHOD > 0 or embed_memfile(options))) or \
          (shared.Settings.WASM_BACKEND and not shared.Settings.MEM_INIT_IN_WASM):
-         memfile = shared.replace_or_append_suffix(target, '.mem')
+         memfile = shared.replace_suffix(target, '.mem')
 
       if memfile:
         if shared.Settings.WASM_BACKEND:
@@ -3096,7 +3096,7 @@ def do_binaryen(target, asm_target, options, memfile, wasm_binary_target,
   if options.use_closure_compiler:
     final = run_closure_compiler(final)
 
-  symbols_file = shared.replace_or_append_suffix(target, '.symbols') if options.emit_symbol_map else None
+  symbols_file = shared.replace_suffix(target, '.symbols') if options.emit_symbol_map else None
 
   if shared.Settings.WASM2JS:
     if shared.Settings.WASM == 2:
