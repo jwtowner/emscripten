@@ -1102,7 +1102,7 @@ class RunnerCore(RunnerMeta('TestCase', (unittest.TestCase,), {})):
     else:
       self.build(filename, libraries=libraries, includes=includes, post_build=post_build,
                  force_c=force_c)
-      js_file = shared.unsuffixed(basename) + '.js'
+      js_file = shared.unsuffixed(os.path.basename(filename)) + '.js'
     self.assertExists(js_file)
 
     engines = self.filtered_js_engines(js_engines)
